@@ -37,56 +37,27 @@ public class Empresa {
     }
     
     public void trabajadores(){ //categoria[empleado[xx].getCodigoCategoria()].getSueldo
-        String nombre;
+        String nombre, categoria;
+        int existe;
         float ventas;
+        boolean correcto = true;
         for(int i = 0;i < empleados.length;i++){
             nombre = pedirNombre("introduzca el nombre del empleado");
             empleados[i] = new Empleado(nombre);
-            menu();
-            elegirCategoria(i);
+            categoria = pedirCategoria("introduzca el nombre de la categoria");
+            existe = busqueda(categoria);
+            while(correcto){
+                if(existe == -1){
+                    System.out.println("no existe esa categoria");
+                    categoria = pedirCategoria("introduzca el nombre de la categoria");
+                    existe = busqueda(categoria);
+                }else{
+                    empleados[i].setCategoria(existe); //categorias[].getNombre();
+                    correcto = false;
+                }
+            }
             ventas = pedirNumeroReal("introduzca las ventas del empleado",0,Float.MAX_VALUE);
             empleados[i].setImportVentas(ventas);
-            //existe = busqueda(categoria);
-            /*if(existe == -1){
-                System.out.println("no existe esa categoria");
-            }else{
-                empleados[i].setCategoria(categoria); //categorias[].getNombre();
-            }*/
-        }
-    }
-    
-    public void menu(){
-        System.out.println("1. ADMINISTRATIVO");
-        System.out.println("2. PROGRAMADOR");
-        System.out.println("3. ANALISTA");
-        System.out.println("4. OPERADOR");
-    }
-    
-    public void elegirCategoria(int i){
-        int opcion, sitio;
-        String catego;
-        opcion = pedirNumero(1,4,"introduzca el numero de la categoria que quiere");
-        switch(opcion){
-            case 1:
-                catego = "administrativo";
-                sitio = busqueda(catego);
-                empleados[i].setCategoria(sitio);
-                break;
-            case 2:
-                catego = "programador";
-                sitio = busqueda(catego);
-                empleados[i].setCategoria(sitio);
-                break;
-            case 3:
-                catego = "analista";
-                sitio = busqueda(catego);
-                empleados[i].setCategoria(sitio);
-                break;
-            case 4:
-                catego = "operador";
-                sitio = busqueda(catego);
-                empleados[i].setCategoria(sitio);
-                break;
         }
     }
     
@@ -99,6 +70,9 @@ public class Empresa {
             }else{
 		cate++;
             }
+        }
+        if(!encontrado){
+            cate = -1;
         }
         return cate;
     }
@@ -146,6 +120,24 @@ public class Empresa {
     }
     
     private String pedirNombre(String mensaje) {
+       InputStreamReader flujo = new InputStreamReader(System.in);
+       BufferedReader entrada = new BufferedReader(flujo);
+       String dato = ""; //puedo poner new string tambien
+       try {
+           System.out.println(mensaje);
+           dato = entrada.readLine();
+           while(dato.trim().isEmpty()){ //dato.trim().equals("")
+               System.out.println("no es un tipo de curso valido");
+               System.out.println(mensaje);
+               dato = entrada.readLine();
+           }
+       }catch(IOException ex) {
+           System.out.println("");
+       }
+       return dato;
+    }
+    
+    private String pedirCategoria(String mensaje) {
        InputStreamReader flujo = new InputStreamReader(System.in);
        BufferedReader entrada = new BufferedReader(flujo);
        String dato = ""; //puedo poner new string tambien

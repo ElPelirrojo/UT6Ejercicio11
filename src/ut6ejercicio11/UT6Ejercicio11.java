@@ -15,7 +15,7 @@ public class UT6Ejercicio11 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Empresa miEmpresa = new Empresa(3);
+        Empresa miEmpresa = new Empresa(1);
         miEmpresa.trabajadores();
         miEmpresa.informe();
     }
