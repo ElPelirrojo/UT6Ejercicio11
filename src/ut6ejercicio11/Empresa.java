@@ -18,6 +18,10 @@ public class Empresa {
     Empleado[]empleados;
     Importe[]importes;
     
+    /**
+     * constructo donde inicializaremos los arrays
+     * @param n valor que le pasamos para decirle cuantos empleados queremos
+     */
     public Empresa(int n){
         empleados = new Empleado[n];
         categorias = new Categoria[]{new Categoria("administrativo", 1000f), new Categoria("operador", 1100f), 
@@ -26,7 +30,10 @@ public class Empresa {
             new Importe(25000f, 0.20f), new Importe(Float.MAX_VALUE, 0.25f)};
         //inicializaR()
     }
-    
+    /**
+     * mismo constructor pero sin pasarle ningun valor, se le ponemos directamente cuando le
+     * inicializamos
+     */
     public Empresa(){
         empleados = new Empleado[10];
         categorias = new Categoria[]{new Categoria("administrativo", 1000f), new Categoria("operador", 1100f), 
@@ -35,32 +42,35 @@ public class Empresa {
             new Importe(25000f, 0.20f), new Importe(Float.MAX_VALUE, 0.25f)};
         //inicializaR()
     }
-    
+    /**
+     * metodo donde creamos los trabajadores y metemos los datos como la categoria
+     * y las ventas
+     */
     public void trabajadores(){ //categoria[empleado[xx].getCodigoCategoria()].getSueldo
         String nombre, categoria;
         int existe;
         float ventas;
-        boolean correcto = true;
         for(int i = 0;i < empleados.length;i++){
             nombre = pedirNombre("introduzca el nombre del empleado");
             empleados[i] = new Empleado(nombre);
-            categoria = pedirCategoria("introduzca el nombre de la categoria");
+            categoria = pedirNombre("introduzca el nombre de la categoria");
             existe = busqueda(categoria);
-            while(correcto){
-                if(existe == -1){
-                    System.out.println("no existe esa categoria");
-                    categoria = pedirCategoria("introduzca el nombre de la categoria");
-                    existe = busqueda(categoria);
-                }else{
-                    empleados[i].setCategoria(existe); //categorias[].getNombre();
-                    correcto = false;
-                }
+            while(existe == -1){
+                System.out.println("no existe esa categoria");
+                categoria = pedirNombre("introduzca el nombre de la categoria");
+                existe = busqueda(categoria);
             }
+            empleados[i].setCategoria(existe); //categorias[].getNombre();
             ventas = pedirNumeroReal("introduzca las ventas del empleado",0,Float.MAX_VALUE);
             empleados[i].setImportVentas(ventas);
         }
     }
-    
+    /**
+     * con este metodo lo que hacemos es ver si existe la categoria que metemos en el array
+     * @param categoria le pasamos el valor que a metido el operador
+     * @return retornamos la posicion de la categoria en el array, si no existe retorna el valor
+     * -1
+     */
     public int busqueda(String categoria){
         int cate = 0;
         boolean encontrado = false;
@@ -76,7 +86,11 @@ public class Empresa {
         }
         return cate;
     }
-    
+    /**
+     * metodo para calcular el importe de la comision
+     * @param nempleado le pasamos la posicion del empleado
+     * @return retornamos el valor del importe
+     */
     public float importeComision(int nempleado){
         float resultado;
         int porcentaje;
@@ -84,7 +98,11 @@ public class Empresa {
         resultado = empleados[nempleado].getImportVentas() * importes[porcentaje].getComision();
         return resultado;
     }
-    
+    /**
+     * metodo que nos sirve para buscar el porcentaje segun las ventas
+     * @param nempleado le pasamos la posicion del empleado
+     * @return retornamos esa posicion
+     */
     public int busquedaPorcentaje(int nempleado){
         int cate = 0;
         boolean encontrado = false;
@@ -97,14 +115,21 @@ public class Empresa {
         }
         return cate;
     }
-    
+    /**
+     * metodo que vale para calcular el importe a percibir
+     * @param nempleado
+     * @param importComision
+     * @return 
+     */
     public float importePercibir(int nempleado, float importComision){
         float resultado, sueldo;
         sueldo = categorias[empleados[nempleado].getCategoria()].getSueldo();
         resultado = sueldo + importComision;
         return resultado;
     }
-    
+    /**
+     * este metodo es para sacar el informe final
+     */
     public void informe(){
         int nempleado;
         float importComision;
@@ -118,7 +143,11 @@ public class Empresa {
             //System.out.println(importePercibir(nempleado, importComision));
         }
     }
-    
+    /**
+     * este metodo es el que usamos para pedir el nombre del empleado
+     * @param mensaje le pasamos un mensaje para que el operador sepa que hacer
+     * @return nos retorna un String con el nombre del empleado
+     */
     private String pedirNombre(String mensaje) {
        InputStreamReader flujo = new InputStreamReader(System.in);
        BufferedReader entrada = new BufferedReader(flujo);
@@ -136,25 +165,15 @@ public class Empresa {
        }
        return dato;
     }
-    
-    private String pedirCategoria(String mensaje) {
-       InputStreamReader flujo = new InputStreamReader(System.in);
-       BufferedReader entrada = new BufferedReader(flujo);
-       String dato = ""; //puedo poner new string tambien
-       try {
-           System.out.println(mensaje);
-           dato = entrada.readLine();
-           while(dato.trim().isEmpty()){ //dato.trim().equals("")
-               System.out.println("no es un tipo de curso valido");
-               System.out.println(mensaje);
-               dato = entrada.readLine();
-           }
-       }catch(IOException ex) {
-           System.out.println("");
-       }
-       return dato;
-    }
-    
+    /**
+     * este metodo sirve para pedir las ventas del empleado
+     * @param mensaje le pasamos un mensaje para que el operador sepa que hacer
+     * @param limiteInferior le pasamos el limite inferior para que no pueda
+     * meter un valor menor que ese
+     * @param limiteSuperior le pasamos el limite superior para queno pueda meter
+     * un valor mayor que el que le pasamos
+     * @return retonamos el numero
+     */
     public float pedirNumeroReal(String mensaje, float limiteInferior, float limiteSuperior) {
         InputStreamReader flujo = new InputStreamReader(System.in);
         BufferedReader entrada = new BufferedReader(flujo);
@@ -181,31 +200,4 @@ public class Empresa {
         }
         return numero;
     }
-    
-    public int pedirNumero(int limInferior, int limSuperior, String mensaje) {
-        InputStreamReader flujo = new InputStreamReader(System.in);
-        BufferedReader entrada = new BufferedReader(flujo);
-        int numero = 0;
-        boolean mal;
-        try {
-            mal = true;
-            while (mal) {
-                try {
-                    System.out.println(mensaje);
-                    numero = Integer.parseInt(entrada.readLine());
-                    if(numero >= limInferior && numero <= limSuperior) {
-                        mal = false;
-                    }else{
-                        System.out.println("No cumple las condiciones");
-                    }
-                } catch (NumberFormatException ex) {
-                    System.out.println("No es un numero");
-                }
-            }
-        } catch (IOException ex) {
-        }
-        return numero;
-    }
-    
-    
 }
