@@ -117,9 +117,9 @@ public class Empresa {
     }
     /**
      * metodo que vale para calcular el importe a percibir
-     * @param nempleado
-     * @param importComision
-     * @return 
+     * @param nempleado le pasamos la posicion del empleado
+     * @param importComision y le pasamos el importe comision antes calculado
+     * @return retornamos el importe a percibir
      */
     public float importePercibir(int nempleado, float importComision){
         float resultado, sueldo;
@@ -139,8 +139,6 @@ public class Empresa {
             importComision = importeComision(nempleado);
             System.out.println(empleados[nempleado].getNombre() + "     " + categorias[empleados[nempleado].getCategoria()].getNombre() 
                     + "   " + empleados[nempleado].getImportVentas() + "            " + importComision + "               " + importePercibir(nempleado, importComision));
-            //System.out.println(importComision);
-            //System.out.println(importePercibir(nempleado, importComision));
         }
     }
     /**
